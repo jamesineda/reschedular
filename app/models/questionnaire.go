@@ -1,6 +1,10 @@
 package models
 
-import "database/sql"
+import (
+	"database/sql"
+	"fmt"
+	"time"
+)
 
 /*
 	+----------------------+------------+----+---+-------+-----+
@@ -38,4 +42,15 @@ func (q *Questionnaire) CanAttempt(attemptNo int) bool {
 	}
 
 	return attemptNo < int(q.MaxAttempts.Int64)
+}
+
+// GetHoursBetweenAttemptsDuration mimics the DB schema and defaults to 24 hours if HoursBetweenAttempts is null
+func (q *Questionnaire) GetHoursBetweenAttemptsDuration() (duration time.Duration) {
+	if q.HoursBetweenAttempts.Valid {
+		duration, _ = time.ParseDuration(fmt.Sprintf("%dh", q.HoursBetweenAttempts.Int64))
+		return
+	}
+
+	duration, _ = time.ParseDuration("24h")
+	return
 }

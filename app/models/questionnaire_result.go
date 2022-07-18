@@ -27,3 +27,18 @@ type QuestionnaireResult struct {
 }
 
 type QuestionnaireResults []*QuestionnaireResult
+
+func (qr *QuestionnaireResults) Count() int {
+	return len(*qr)
+}
+
+func (qr *QuestionnaireResults) GetMostRecentResult() (questionnaireResult *QuestionnaireResult) {
+	for _, result := range *qr {
+		if questionnaireResult == nil {
+			questionnaireResult = result
+		} else if result.CompletedAt != nil && result.CompletedAt.After(*questionnaireResult.CompletedAt) {
+			questionnaireResult = result
+		}
+	}
+	return
+}
