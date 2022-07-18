@@ -1,0 +1,6 @@
+# Example db connection config file
+database:
+  client_name: "sqlx"
+  driver: "mysql"
+  dsn: "root:@/database_name?parseTime=true"
+  db_conn_max_life_time: "20s"
